@@ -13,7 +13,7 @@ class CreateItemTable extends Migration
      */
     public function up()
     {
-        Schema::create('item', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('kategori_id')->constrained('kategori');
             $table->foreignId('tipe_id')->constrained('tipe');

@@ -26,4 +26,16 @@ class ItemController extends Controller
     {
         return Item::all();
     }
+
+    function deleteItem ($id)
+    {
+        $result= Item::where('id', $id)->delete();
+        if($result)
+        {
+            return ["result"=> "Item berhasil dihapus"];
+        }
+        else {
+            return ["result"=> "Operation failed"];
+        }
+    }
 }

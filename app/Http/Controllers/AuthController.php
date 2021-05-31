@@ -23,40 +23,14 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $rules = [
-            'email'                 => 'required|email',
-            'password'              => 'required|string'
-        ];
+        $user = User::where('email', $request->email)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
 
-        $messages = [
-            'email.required'        => 'Email wajib diisi',
-            'email.email'           => 'Email tidak valid',
-            'password.required'     => 'Password wajib diisi',
-            'password.string'       => 'Password harus berupa string'
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if($validator->fails()){
-            return redirect()->back()->withErrors($validator)->withInput($request->all);
+            return response(["error" => "Email atau password salah"], 401);
         }
-
-        $data = [
-            'email'     => $request->input('email'),
-            'password'  => $request->input('password'),
-        ];
-
-        Auth::attempt($data);
-
-        if (Auth::check()) {
-            return redirect()->route('home');
-
-        } else {
-            Session::flash('error', 'Email atau password salah');
-            return redirect()->route('login');
-        }
-
+        return $user;
     }
+
 
     public function showFormRegister()
     {
@@ -84,7 +58,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
 
@@ -95,7 +69,7 @@ class AuthController extends Controller
         $user->email_verified_at = \Carbon\Carbon::now();
         $simpan = $user->save();
 
-        if($simpan){
+        if ($simpan) {
             Session::flash('success', 'Register berhasil!');
             return redirect()->route('login');
         } else {
@@ -104,9 +78,14 @@ class AuthController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('login');
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return response()->json([], 204);
     }
 }

@@ -15,11 +15,11 @@ class CreateItemTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kategori_id')->constrained('kategori');
-            $table->foreignId('tipe_id')->constrained('tipe');
-            $table->foreignId('user_id')->constrained('users');
+            // $table->foreignId('kategori_id')->nullable();
+            // $table->foreignId('tipe_id')->nullable();
+            // $table->foreignId('user_id')->nullable();
             $table->string('judul', 20);
-            $table->binary('foto');
+            $table->string('foto', 100);
             $table->text('keterangan');
             $table->string('lokasi', 50);
             $table->string('kontak', 50);
@@ -34,6 +34,6 @@ class CreateItemTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('item');
+        Schema::dropIfExists('items');
     }
 }

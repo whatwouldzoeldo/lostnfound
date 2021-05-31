@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\QuestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +26,10 @@ Route::get('items/{item}', 'ItemController@show');
 Route::post('items', 'ItemController@store');
 Route::put('items/{item}', 'ItemController@update');
 Route::delete('items/{item}', 'ItemController@delete');
+Route::post('barangku', [QuestionController::class, 'addQuestion']);
+
+// Route::post('login', [AccessTokenController::class, 'issueToken'])
+//     ->middleware([
+//         'api-login', 'throttle'
+//     ]);
+// Route::post('login', [AuthController::class,'login']);
